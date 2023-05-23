@@ -1,2 +1,2 @@
 # typewriter
-HTML and JAvascript pseudo typewriter
+HTML and Javascript pseudo typewriter
