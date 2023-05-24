@@ -1,6 +1,5 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const MIniCssExtractPlugin = require("mini-css-extract-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
@@ -40,5 +39,6 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: "typewriter",
     }),
+    new MiniCssExtractPlugin(),
   ],
 };
