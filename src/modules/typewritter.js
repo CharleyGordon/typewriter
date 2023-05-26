@@ -1,28 +1,61 @@
 import configObject from "./configObject";
 
-function updateText(refferenceText, target, cssHiddenClass, speed) {
+function signAsTyping(element, typingCssClass) {
+  if (!element) return;
+  element.classList.add(typingCssClass);
+}
+function unsignTypingClass(element, typingCssClass) {
+  element.classList.remove(typingCssClass);
+}
+
+function updateText({
+  refferenceText,
+  target,
+  cssHiddenClass,
+  speed,
+  typingCssClass,
+}) {
+  signAsTyping(target, typingCssClass);
   if (refferenceText.length < 1) {
-    return checkNextElement(target, cssHiddenClass, speed);
+    unsignTypingClass(target, typingCssClass);
+    return checkNextElement(target, cssHiddenClass, speed, typingCssClass);
   }
   setTimeout(() => {
     const nextLetter = refferenceText.shift();
     target.textContent += nextLetter;
-    return updateText(refferenceText, target, cssHiddenClass, speed);
+    return updateText({
+      refferenceText,
+      target,
+      cssHiddenClass,
+      speed,
+      typingCssClass,
+    });
   }, speed);
 }
 
-function checkNextElement(currentElement, cssHiddenClass, speed) {
+function checkNextElement(
+  currentElement,
+  cssHiddenClass,
+  speed,
+  typingCssClass
+) {
   const sibling = currentElement.nextElementSibling;
   if (!sibling) return;
-  return extractTextAndUpdate(sibling, cssHiddenClass, speed);
+  extractTextAndUpdate(sibling, cssHiddenClass, speed, typingCssClass);
 }
 
-function extractTextAndUpdate(element, cssHiddenClass, speed) {
+function extractTextAndUpdate(element, cssHiddenClass, speed, typingCssClass) {
   const { textContent } = element;
-  const textArray = textContent.split("");
+  const refferenceText = textContent.split("");
   element.textContent = "";
   element.classList.remove(cssHiddenClass);
-  updateText(textArray, element, cssHiddenClass, speed);
+  updateText({
+    refferenceText,
+    target: element,
+    cssHiddenClass,
+    speed,
+    typingCssClass,
+  });
 }
 
 function hideChildren({ cssHiddenClass, children }) {
@@ -31,12 +64,22 @@ function hideChildren({ cssHiddenClass, children }) {
   });
 }
 
-function startTypeWriter({ selector, speed, cssHiddenClass } = configObject) {
+function startTypeWriter({
+  selector,
+  speed,
+  cssHiddenClass,
+  typingCssClass,
+} = configObject) {
   const typeWriterElement = document.querySelector(selector);
   const { children } = typeWriterElement;
   const typeWriterFirstChild = children[0];
   hideChildren({ cssHiddenClass, children });
-  extractTextAndUpdate(typeWriterFirstChild, cssHiddenClass, speed);
+  extractTextAndUpdate(
+    typeWriterFirstChild,
+    cssHiddenClass,
+    speed,
+    typingCssClass
+  );
 }
 startTypeWriter();
 export default 42;
