@@ -70,16 +70,17 @@ function startTypeWriter({
   cssHiddenClass,
   typingCssClass,
 } = configObject) {
-  const typeWriterElement = document.querySelector(selector);
-  const { children } = typeWriterElement;
-  const typeWriterFirstChild = children[0];
-  hideChildren({ cssHiddenClass, children });
-  extractTextAndUpdate(
-    typeWriterFirstChild,
-    cssHiddenClass,
-    speed,
-    typingCssClass
-  );
+  const typeWriterElements = Array.from(document.querySelectorAll(selector));
+  typeWriterElements.forEach((typeWriterElement) => {
+    const { children } = typeWriterElement;
+    const typeWriterFirstChild = children[0];
+    hideChildren({ cssHiddenClass, children });
+    extractTextAndUpdate(
+      typeWriterFirstChild,
+      cssHiddenClass,
+      speed,
+      typingCssClass
+    );
+  });
 }
-startTypeWriter();
-export default 42;
+export default startTypeWriter();
